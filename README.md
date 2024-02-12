@@ -28,3 +28,6 @@ To replicate the analysis, download the processed data from the [supplementary f
   - `GSM4594094_M11_dcm.csv`: Processed read counts data.
   - `GSM4594094_M11_genes.csv.csv`: Gene names.
   - `GSM4594094_M11_barcodes.csv`: Sample annotations (_Escherichia coli_ vs _Bacillus subtilis_).
+
+![volcano_plot](https://github.com/manuelgug/Single-Cell_Transcriptomics/blob/main/figures/volcano_plot.png)
+_Figure 1. Volcano plot of top differencially expressed genes. logFC cutoff was set to 0.1 just to see some colors, so don't take this too seriousy..._
