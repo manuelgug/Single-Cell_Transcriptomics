@@ -10,7 +10,8 @@ This project aims to analyze bacterial cell gene expression using the microbial 
 
 Ensure you have the following R packages installed:
 
-- `edgeR`: for differential expression analysis.
+- `edgeR` for differential expression analysis.
+- `Rtsne` for T-distributed Stochastic Neighbor Embedding calcultions.
 - `ggplot2` and `ggrepel` for visualization of results.
 
 ## Files and Directories
@@ -21,6 +22,7 @@ Ensure you have the following R packages installed:
 - **figures**: Directory for storing generated figures.
   - `ma_plot.png`: MA plot visualizing differential expression results.
   - `volcano_plot.png`: Volcano plot visualizing differential expression results.
+  - `tsne_plot.png`: T-sne plot visualizing clustering of expressed genes by species.
 
 ## Reproducing the Analysis
 
@@ -31,3 +33,6 @@ To replicate the analysis, download the processed data from the [supplementary f
 
 ![volcano_plot](https://github.com/manuelgug/Single-Cell_Transcriptomics/blob/main/figures/volcano_plot.png)
 _Figure 1. Volcano plot of top differencially expressed genes. logFC cutoff was set to 0.1 just to see some colors, so don't take this too seriousy..._
+
+![tsne_plot](https://github.com/manuelgug/Single-Cell_Transcriptomics/blob/main/figures/tsne_plot.png)
+_Figure 2. T-sne plot of expressed genes, categorized by spcies._
