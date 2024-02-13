@@ -2,6 +2,7 @@
 library(edgeR)
 library(ggplot2)
 library(ggrepel)
+library(Rtsne)
 
 
 ### IMPORT DATA (downloaded from https://geo.metadataplus.biothings.io/geo/query/acc.cgi?acc=GSE151940;)
@@ -31,17 +32,21 @@ rownames(raw_counts) <- genes$V1
 ### ANALYZE DATA
 
 # Create a DGEList object
-dge <- DGEList(counts = raw_counts, group = factor(as.matrix(annot)), remove.zeros = T)
+dge <- DGEList(counts = raw_counts, group = factor(annot$V1))
 
-# Filter shitty samples
+# Filter shitty samples (strong filter!)
 keep <- filterByExpr(y = dge)
-dge <- dge[keep, , keep.lib.sizes=FALSE]
+dge <- dge[keep, keep.lib.sizes=TRUE]
 
 # Carculate normalization factors and normalize through TMM
 dge <- calcNormFactors(object = dge)
 
 # Estimate dispersions
 dge <- estimateDisp(y = dge)
+
+# Dimensionality reduction with t-SNE
+set.seed(69420) 
+tsne_data <- Rtsne(dge$counts, check_duplicates = FALSE, perplexity = 5)
 
 # Calculate average expression levels
 ave_expr <- rowMeans(cpm(dge))
@@ -55,6 +60,17 @@ write.csv(top_degs, "top_degs.csv")
 
 
 ### VISUALIZE RESULTS
+
+# t-SNE
+tsne_df <- as.data.frame(tsne_data$Y)
+colnames(tsne_df) <- c("tSNE1", "tSNE2")
+tsne_df$condition <- sub("^[^M]*_", "", rownames(dge$counts))
+tsne_plot <- ggplot(tsne_df, aes(x = tSNE1, y = tSNE2, color = condition)) +
+  geom_point() +
+  labs(title = "t-SNE Plot", color = "Condition") +
+  theme_minimal()
+
+print(tsne_plot)
 
 # Define significance cutoffs
 logFC_cutoff <- 0.1    # Laughably lax, but whatever...
@@ -90,3 +106,4 @@ print(ma_plot)
 
 ggsave("volcano_plot.png", plot = volcano_plot, width = 8, height = 6, units = "in", bg = "white")
 ggsave("ma_plot.png", plot = ma_plot, width = 8, height = 6, units = "in", bg = "white")
+ggsave("tsne_plot.png", plot = tsne_plot, width = 8, height = 6, units = "in", bg = "white")
